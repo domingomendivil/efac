@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/efactura_x/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="efactura_x" targetNamespace="http://www.example.org/efactura_x/" xmlns:xsd1="http://cfe.dgi.gub.uy">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/efactura_x/">
+            <xsd:import schemaLocation="CFETypeX_v1.21.xsd" namespace="http://cfe.dgi.gub.uy"></xsd:import>
+            <xsd:import schemaLocation="CFEType_v1.21.xsd" namespace="http://cfe.dgi.gub.uy"></xsd:import>
+            <xsd:element name="generarCFE">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="generarCFEResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="generarCFEs">
+      	<xsd:complexType>
+      		<xsd:sequence>
+
+      			<xsd:element name="in" type="xsd:string"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="generarCFEsResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+
+      			<xsd:element name="out" type="xsd:string"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="OutGenerarCFE">
+      	<xsd:sequence>
+      		<xsd:element name="ok" type="xsd:boolean"></xsd:element>
+      		<xsd:element name="cfe" type="xsd1:CFEDefType"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+            <xsd:complexType name="Lista_CFE_x"></xsd:complexType>
+            <xsd:complexType name="OutGenerarCFEs">
+            	<xsd:sequence>
+            		<xsd:element name="ok" type="xsd:boolean"></xsd:element>
+            		<xsd:element name="cfe" type="xsd1:CFEDefType" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="cfe_x" type="xsd1:CFEDefType_X"></xsd:element>
+            <xsd:element name="output_generarCFE"
+            	type="tns:OutGenerarCFE">
+            </xsd:element>
+            <xsd:element name="lista" type="tns:Lista_CFE_x"></xsd:element>
+            <xsd:element name="output_generarCFEs"
+            	type="tns:OutGenerarCFEs">
+            </xsd:element>
+    </xsd:schema>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    	<xsd:import namespace="http://cfe.dgi.gub.uy"
+    		schemaLocation="CFETypeX_v1.21.xsd">
+    	</xsd:import></xsd:schema></wsdl:types>
+  <wsdl:message name="generarCFERequest">
+    <wsdl:part name="parameters" element="tns:cfe_x" />
+  </wsdl:message>
+  <wsdl:message name="generarCFEResponse">
+    <wsdl:part name="parameters" element="tns:output_generarCFE"/>
+  </wsdl:message>
+  <wsdl:message name="generarCFEsRequest">
+  	<wsdl:part name="parameters" element="tns:lista"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generarCFEsResponse">
+  	<wsdl:part name="parameters" element="tns:output_generarCFEs"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="efactura_x">
+    <wsdl:operation name="generarCFE">
+      <wsdl:input message="tns:generarCFERequest"/>
+      <wsdl:output message="tns:generarCFEResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="generarCFEs">
+    	<wsdl:input message="tns:generarCFEsRequest"></wsdl:input>
+    	<wsdl:output message="tns:generarCFEsResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="efactura_xSOAP" type="tns:efactura_x">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="generarCFE">
+      <soap:operation soapAction="http://www.example.org/efactura_x/generarCFE"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+      <wsdl:operation name="generarCFEs">
+      <soap:operation soapAction="http://www.example.org/efactura_x/generarCFE"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="efactura_x">
+    <wsdl:port binding="tns:efactura_xSOAP" name="efactura_xSOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

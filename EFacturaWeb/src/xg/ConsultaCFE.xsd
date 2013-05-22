@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ACK de Sobre de CFEs - DGI ( Comprobante Fiscal Electrónico)
+El presente documento define el esquema XML que debe ser utilizado
+para realizar los envios de acuses de recibo del Sobre de CFEs a DGI
+Autor: Gustavo Pallas
+FUA: 30/08/12
+-->
+<xs:schema xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ns1="http://cfe.dgi.gub.uy" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://cfe.dgi.gub.uy" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+
+    <xs:element name="ConsultaCFE">
+    	<xs:complexType>
+    		<xs:sequence>
+    			<xs:element name="IdReceptor" type="xs:integer"></xs:element>
+    			<xs:element name="Token" type="xs:integer"></xs:element>
+    		</xs:sequence>
+    	</xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -1,0 +1,7 @@
+<jxb:bindings
+	schemaLocation="file://C:\Users\d0178\workspace\efactura\xsds\CFETypeX_v1.21.xsd">
+	<jxb:bindings
+		node="/xs:schema/xs:complexType[@name='Referencia']/xs:sequence/xs:element[@name='Referencia']/xs:complexType">
+		<jxb:class name="ReferenciaElement" />
+	</jxb:bindings>
+</jxb:bindings>

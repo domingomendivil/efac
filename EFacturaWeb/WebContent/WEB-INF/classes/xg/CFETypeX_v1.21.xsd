@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Comprobante Fiscal Electrónico (CFE) - DGI El presente documento define 
+	el esquema XML que debe ser utilizado realizar el envío de CFEs a DGI. Para 
+	la firma debe usarse X509IssuerSerial ( para la KeyInfo / X509Data ) que 
+	deberán corresponderse con el certificado incluido en el EnvioCFE FUA: 30/08/12 
+	Autor: Gustavo Pallas -->
+<xs:schema xmlns:DGICFE="http://cfe.dgi.gub.uy" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://cfe.dgi.gub.uy"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="DGITypes_v1.13.xsd" />
+	<xs:include schemaLocation="CFEType_v1.21.xsd" />
+	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
+		schemaLocation="xmldsig-core-schema.xsd" />
+
+	<xs:complexType name="CFEDefType_X">
+		<xs:annotation>
+			<xs:documentation>Comprobante Fiscal Electronico</xs:documentation>
+		</xs:annotation>
+		
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="eTck">
+					<xs:annotation>
+						<xs:documentation>
+							Informacion Tributaria del CFE
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+
+							<xs:element name="Encabezado">
+								<xs:annotation>
+									<xs:documentation>
+										Identificacion y Totales del
+										Documento
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="IdDoc">
+											<xs:annotation>
+												<xs:documentation>
+													Identificacion del
+													CFE
+												</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element
+														name="TipoCFE">
+														<xs:annotation>
+															<xs:documentation>
+																Tipo de
+																CFE
+															</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction
+																base="DGICFE:CFEType">
+																<xs:enumeration
+																	value="101" />
+																<xs:enumeration
+																	value="102" />
+																<xs:enumeration
+																	value="103" />
+																<xs:enumeration
+																	value="201" />
+																<xs:enumeration
+																	value="202" />
+																<xs:enumeration
+																	value="203" />
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element
+														name="Serie" type="DGICFE:SerieType">
+													</xs:element>
+													<xs:element
+														name="Nro" type="DGICFE:NroCFEType">
+													</xs:element>
+													<xs:element
+														name="FchEmis" type="DGICFE:FechaType">
+													</xs:element>
+													<xs:element
+														name="PeriodoDesde" type="DGICFE:FechaType" maxOccurs="1"
+														minOccurs="0">
+													</xs:element>
+													<xs:element
+														name="PeridoHasta" type="DGICFE:FechaType" maxOccurs="1"
+														minOccurs="0">
+													</xs:element>
+													<xs:element
+														name="MntBruto" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indica el uso de Montos Brutos en Detalle (IVA inc.)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:enumeration value="1">
+							<xs:annotation>
+								<xs:documentation>Monto de Lineas de Detalle  Corresponde a Valores Brutos (IVA + Impuestos Adicionales)</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>														
+													</xs:element>
+													<xs:element
+														name="FmaPago">
+																		<xs:annotation>
+					<xs:documentation>Forma de Pago del CFE</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:positiveInteger">
+						<xs:enumeration value="1">
+							<xs:annotation>
+								<xs:documentation>Pago Contado</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+						<xs:enumeration value="2">
+							<xs:annotation>
+								<xs:documentation>Pago Credito</xs:documentation>
+							</xs:annotation>
+						</xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+													</xs:element>
+													<xs:element
+														name="FchVenc" type="DGICFE:FechaType" maxOccurs="1" minOccurs="0">
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Emisor"
+											type="DGICFE:Emisor">
+											<xs:annotation>
+												<xs:documentation>
+													Datos del Emisor
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Receptor"
+											type="DGICFE:Receptor_Tck" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>
+													Datos del Receptor
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Totales"
+											type="DGICFE:Totales">
+											<xs:annotation>
+												<xs:documentation>
+													Montos Totales del
+													CFE
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Detalle">
+								<xs:annotation>
+									<xs:documentation>
+										Detalle del CFE
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Item"
+											type="DGICFE:Item_Det_Fact" maxOccurs="700" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SubTotInfo"
+								type="DGICFE:SubTotInfo" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Subtotales Informativos
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DscRcgGlobal"
+								type="DGICFE:DscRcgGlobal" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Descuentos y/o Recargos que
+										auemntan o disminuyen la base
+										del impuesto
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="MediosPago"
+								type="DGICFE:MediosPago" minOccurs="0" />
+							<xs:element name="Referencia"
+								type="DGICFE:Referencia" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Identificacion de otros
+										documentos Referenciados por
+										Documento
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+
+				<xs:element name="eFact_X">
+					<xs:annotation>
+						<xs:documentation>
+							Informacion Tributaria del CFE
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Encabezado">
+								<xs:annotation>
+									<xs:documentation>
+										Identificacion y Totales del
+										Documento
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="IdDoc"
+											type="DGICFE:IdDoc_Fact">
+											<xs:annotation>
+												<xs:documentation>
+													Identificacion del
+													CFE
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Emisor"
+											type="DGICFE:Emisor">
+											<xs:annotation>
+												<xs:documentation>
+													Datos del Emisor
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Receptor"
+											type="DGICFE:Receptor_Fact">
+											<xs:annotation>
+												<xs:documentation>
+													Datos del Receptor
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Totales"
+											type="DGICFE:Totales">
+											<xs:annotation>
+												<xs:documentation>
+													Montos Totales del
+													CFE
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Detalle">
+								<xs:annotation>
+									<xs:documentation>
+										Detalle del CFE
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Item"
+											type="DGICFE:Item_Det_Fact" maxOccurs="200" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SubTotInfo"
+								type="DGICFE:SubTotInfo" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Subtotales Informativos
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DscRcgGlobal"
+								type="DGICFE:DscRcgGlobal" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Descuentos y/o Recargos que
+										auemntan o disminuyen la base
+										del impuesto
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="MediosPago"
+								type="DGICFE:MediosPago" minOccurs="0" />
+							<xs:element name="ReferenciaEl"
+								type="DGICFE:Referencia" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Identificacion de otros
+										documentos Referenciados por
+										Documento
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="eRem_X">
+					<xs:annotation>
+						<xs:documentation>
+							Informacion Tributaria del CFE
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Encabezado">
+								<xs:annotation>
+									<xs:documentation>
+										Identificacion y Totales del
+										Documento
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="IdDoc"
+											type="DGICFE:IdDoc_Rem">
+											<xs:annotation>
+												<xs:documentation>
+													Identificacion del
+													CFE
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Emisor"
+											type="DGICFE:Emisor">
+											<xs:annotation>
+												<xs:documentation>
+													Datos del Emisor
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Receptor"
+											type="DGICFE:Receptor_Rem">
+											<xs:annotation>
+												<xs:documentation>
+													Datos del Receptor
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Totales">
+											<xs:annotation>
+												<xs:documentation>
+													Montos Totales del
+													CFE
+												</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element
+														name="CantLinDet">
+														<xs:annotation>
+															<xs:documentation>
+																Cantidad
+																de
+																lineas
+																del
+																detalle
+															</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction
+																base="DGICFE:LineasDetType">
+																<xs:totalDigits
+																	value="3" />
+																<xs:fractionDigits
+																	value="0" />
+																<xs:maxInclusive
+																	value="200" />
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Detalle">
+								<xs:annotation>
+									<xs:documentation>
+										Detalle del CFE
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Item"
+											type="DGICFE:Item_Rem" maxOccurs="200" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SubTotInfo"
+								type="DGICFE:SubTotInfo" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Subtotales Informativos
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ReferenciaEl"
+								type="DGICFE:Referencia" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Identificacion de otros
+										documentos Referenciados por
+										Documento
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="eResg_X">
+					<xs:annotation>
+						<xs:documentation>
+							Informacion Tributaria del CFE
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Encabezado">
+								<xs:annotation>
+									<xs:documentation>
+										Identificacion y Totales del
+										Documento
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="IdDoc"
+											type="DGICFE:IdDoc_Resg">
+											<xs:annotation>
+												<xs:documentation>
+													Identificacion del
+													CFE
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Emisor"
+											type="DGICFE:Emisor">
+											<xs:annotation>
+												<xs:documentation>
+													Datos del Emisor
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Receptor"
+											type="DGICFE:Receptor_Resg">
+											<xs:annotation>
+												<xs:documentation>
+													Datos del Receptor
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Totales"
+											type="DGICFE:Totales_Resg">
+											<xs:annotation>
+												<xs:documentation>
+													Montos Totales del
+													CFE
+												</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Detalle">
+								<xs:annotation>
+									<xs:documentation>
+										Detalle del CFE
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Item"
+											type="DGICFE:Item_Resg" maxOccurs="200" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SubTotInfo"
+								type="DGICFE:SubTotInfo" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Subtotales Informativos
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ReferenciaEl"
+								type="DGICFE:Referencia" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>
+										Identificacion de otros
+										documentos Referenciados por
+										Documento
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+
+			<xs:element name="tipoCFE" type="xs:int"></xs:element>
+		</xs:sequence>
+		<xs:attribute name="version" use="required" fixed="1.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="3" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+
+
+</xs:schema>

@@ -1,0 +1,18 @@
+CÓDIGO CFE
+101 e-Ticket
+102 Nota Créd. e-Ticket
+103 Nota Débito e-Ticket
+111 e-Factura
+112 Nota Créd. e-Factura
+113 Nota Débito e-Factura
+181 e-Remito
+182 e-Resguardo
+CÓDIGO CFC
+201 e-Ticket Contingencia
+202 Nota Créd. e-Ticket Contingencia
+203 Nota Débito e-Ticket Contingencia
+211 e-Factura Contingencia
+212 Nota Créd. e-Factura Contingencia
+213 Nota Débito e-Factura Contingencia
+281 e-Remito Contingencia
+282 e-Resguardo Contingencia
